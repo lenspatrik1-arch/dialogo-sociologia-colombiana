@@ -246,11 +246,30 @@
         <div class="container fade-up">
             <div class="badge">ENCUENTRO DIALÓGICO</div>
             <h2>Imaginación sociológica en la ruralidad</h2>
-            <p class="text-muted" style="font-size:1.1rem; margin-bottom: 2rem;">La vulnerabilidad no es un accidente individual, sino una falla estructural. Conversan tres estudiantes a partir de enfoques distintos del mismo problema.</p>
+            <p class="text-muted" style="font-size:1.1rem; margin-bottom: 2rem;">La vulnerabilidad no es un accidente individual, sino una falla estructural. Tres perspectivas para desentrañar la protección social en el campo.</p>
+            
             <div class="grid-3">
-                <div class="expert-card"><i class="fas fa-user-graduate" style="font-size: 2rem; color: var(--accent-deep);"></i><h3>Yuli Castillo (S)</h3><p>Presenta la lectura sociológica del problema y conecta los hallazgos con Giddens.</p></div>
-                <div class="expert-card"><i class="fas fa-chart-line" style="font-size: 2rem; color: var(--accent-deep);"></i><h3>Emperatriz Gomez (E)</h3><p>Expone los datos clave sobre informalidad, pobreza y cobertura en el mundo rural.</p></div>
-                <div class="expert-card"><i class="fas fa-gavel" style="font-size: 2rem; color: var(--accent-deep);"></i><h3>Sebastian Garzon (M)</h3><p>Analiza las implicaciones normativas y las limitaciones de la política pública.</p></div>
+                <div class="expert-card" style="border-top: 4px solid var(--accent-deep);">
+                    <i class="fas fa-user-graduate" style="font-size: 2rem; color: var(--accent-deep);"></i>
+                    <h3>Yuli Castillo (S)</h3>
+                    <p><strong>Sociología Teórica:</strong> Ancla la discusión en Anthony Giddens y la conexión biografía-historia.</p>
+                </div>
+                <div class="expert-card" style="border-top: 4px solid var(--accent-green);">
+                    <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--accent-green);"></i>
+                    <h3>Emperatriz Gomez (E)</h3>
+                    <p><strong>Estadística Social:</strong> Sustenta los "hechos sociales" con datos de Mena Rubio y el DANE.</p>
+                </div>
+                <div class="expert-card" style="border-top: 4px solid var(--accent-gold);">
+                    <i class="fas fa-gavel" style="font-size: 2rem; color: var(--accent-gold);"></i>
+                    <h3>Sebastian Garzon (M)</h3>
+                    <p><strong>Política Pública:</strong> Analiza la eficacia del sistema de riesgos y el marco legal nacional.</p>
+                </div>
+            </div>
+
+            <!-- Hook del Café (Giddens) -->
+            <div class="dialogue-bubble" style="margin-top: 2.5rem; background: #fdf2e9; border-left-color: #633215;">
+                <i class="fas fa-mug-hot" style="color: #633215; margin-right: 0.5rem;"></i>
+                <strong>Yuli Castillo:</strong> “Giddens usa el <strong>café</strong> para ilustrar la sociología: nos conecta con transacciones globales, pero el trabajador que lo produce en Colombia vive en la periferia de la protección social.”
             </div>
         </div>
     </section>
@@ -268,9 +287,9 @@
                             <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
                             <tbody>
                                 <tr><td>Población rural total</td><td><strong>11.3 millones</strong></td></tr>
-                                <tr><td>Ocupados agropecuarios</td><td>~4.84 millones</td></tr>
+                                <tr><td>Cobertura en Salud</td><td><strong>98.56%</strong></td></tr>
                                 <tr><td>Pobreza extrema rural (OIT)</td><td><span class="stat-number" style="font-size:1.5rem;">88%</span></td></tr>
-                                <tr><td>Informalidad rural (2024)</td><td><strong>82.8%</strong></td></tr>
+                                <tr><td>Incremento Accidentes (2018)</td><td><span style="color: var(--accent-deep); font-weight: 700;">+12.4%</span></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -294,8 +313,18 @@
                     <div class="expert-card"><i class="fas fa-seedling" style="color: var(--accent-deep);"></i> <h3>🌾 Sociocultural</h3><p>Naturalización del riesgo: “gajes del oficio”. 88% pobreza extrema limita la agencia y el conocimiento de derechos.</p></div>
                 </div>
                 <div>
-                    <canvas id="informalChart" width="400" height="280" style="max-height: 280px;"></canvas>
-                    <p class="text-muted" style="margin-top: 1rem;">Fuente: DANE oct-dic 2024 / rural disperso 82.8% vs nacional 55.8%</p>
+                    <div class="data-table">
+                        <table>
+                            <thead><tr><th>Dominio (DANE 2024)</th><th>Informalidad</th></tr></thead>
+                            <tbody>
+                                <tr><td>Centros poblados y rural</td><td>82.8%</td></tr>
+                                <tr><td>Mujeres (Sector rural)</td><td><strong>84.8%</strong></td></tr>
+                                <tr><td>Hombres (Sector rural)</td><td>84.4%</td></tr>
+                                <tr><td>Total Nacional (Contraste)</td><td>55.8%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <canvas id="informalChart" width="400" height="200" style="max-height: 200px; margin-top: 1.5rem;"></canvas>
                 </div>
             </div>
         </div>
@@ -335,10 +364,10 @@
                 <div>
                     <div class="expert-card" style="border-top: 5px solid var(--accent-gold);">
                         <i class="fas fa-balance-scale"></i>
-                        <h3>Enfoque diferencial urgente</h3>
-                        <p>Mena Rubio propone: ARL itinerantes, educación en derechos laborales, ajuste del IBC progresivo para ingresos estacionales.</p>
-                        <p><strong>Transformación estructural:</strong> Giddens — cambiar reglas para nuevas formas de acción colectiva y protección.</p>
-                        <a style="margin-top:1rem; display:inline-block; background: var(--accent-deep); color:white; padding:0.5rem 1.2rem; border-radius: 60px; text-decoration:none;">Leer investigación completa</a>
+                        <h3>Hacia la Justicia Social</h3>
+                        <p><strong>Propuesta de Mena Rubio:</strong> ARL itinerantes, capacitación en derechos y ajuste del Ingreso Base de Cotización (IBC) para ingresos estacionales.</p>
+                        <p style="margin-top: 1rem;"><strong>Transformación:</strong> Cambiar las reglas de la estructura para permitir nuevas formas de acción (Giddens).</p>
+                        <a style="margin-top:1rem; display:inline-block; background: var(--accent-deep); color:white; padding:0.5rem 1.2rem; border-radius: 60px; text-decoration:none;">Ver Recomendaciones</a>
                     </div>
                 </div>
             </div>
