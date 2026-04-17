@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Debate Sociológico | Inseguridad Social Rural Colombia</title>
+    <!-- Google Fonts & Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Font Awesome 6 (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-soft: #fef9f0;
+            --text-dark: #1e1b2c;
+            --text-muted: #4a4a5a;
+            --accent-deep: #c4450c;    /* debate / tierra */
+            --accent-rust: #b33f0a;
+            --accent-gold: #e6b422;
+            --accent-green: #2a6e3b;
+            --blue-slate: #1e3a5f;
+            --border-light: #e9e5df;
+            --shadow-sm: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-soft);
+            color: var(--text-dark);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* scroll snap (diapositivas) */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            position: relative;
+            background: var(--bg-primary);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* tipografía */
+        h1, h2, h3, .heading {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: var(--accent-deep);
+            border-radius: 4px;
+        }
+
+        /* cards, burbujas */
+        .expert-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+        }
+        .expert-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-gold);
+        }
+
+        .dialogue-bubble {
+            background: #fcf8f3;
+            border-left: 5px solid var(--accent-deep);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--accent-deep);
+            line-height: 1;
+        }
+
+        /* grid */
+        .grid-2, .grid-3 {
+            display: grid;
+            gap: 2rem;
+        }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); }
+
+        /* botón y navegación */
+        .nav-dots {
+            position: fixed;
+            right: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            transition: 0.2s;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .dot.active {
+            background: var(--accent-deep);
+            transform: scale(1.4);
+            box-shadow: 0 0 0 2px rgba(196,69,12,0.3);
+        }
+
+        /* imágenes hero */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.45) contrast(0.9);
+        }
+        .hero-overlay {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+        }
+
+        /* tablas modernas */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .data-table th {
+            background: var(--blue-slate);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0eae4;
+        }
+
+        .badge {
+            background: var(--accent-gold);
+            color: #1e1b2c;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: #1a1c23;
+            color: #b9b9c5;
+            border-radius: 32px 32px 0 0;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 800px) {
+            .slide { padding: 2rem 1.2rem; }
+            h2 { font-size: 1.8rem; }
+            .nav-dots { display: none; }
+        }
+
+        /* animaciones */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: 0.7s ease-out;
+        }
+        .fade-up.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<div class="slides-container" id="slidesContainer">
+    <!-- SLIDE 0: HERO con imagen real del contexto rural -->
+    <section class="slide" id="heroSlide">
+        <img class="hero-bg" src="https://commons.wikimedia.org/wiki/Special:FilePath/Cafetero.jpg" alt="Trabajador rural en una zona agrícola de Colombia" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='fallback-rural-hero.svg';">
+        <div class="hero-overlay container">
+            <span class="badge" style="background: #c4450c; color:white;">Diálogo académico</span>
+            <h1 style="font-size: 3.8rem; max-width: 900px; margin:0 auto 1rem;">Inseguridad Social en Riesgos Laborales<br>Trabajadores Rurales Colombia</h1>
+            <p style="font-size: 1.3rem; opacity: 0.9;">Un análisis transdisciplinar desde la sociología de Giddens y la investigación de Stephany Andrea Mena Rubio</p>
+            <div style="margin-top: 2rem;"><i class="fas fa-chevron-down" style="font-size: 2rem; opacity: 0.7;"></i></div>
+        </div>
+    </section>
+
+    <!-- SLIDE 1: Introducción + expertos -->
+    <section class="slide" id="introSlide">
+        <div class="container fade-up">
+            <div class="badge">ENCUENTRO DIALÓGICO</div>
+            <h2>Imaginación sociológica en la ruralidad</h2>
+            <p class="text-muted" style="font-size:1.1rem; margin-bottom: 2rem;">La vulnerabilidad no es un accidente individual, sino una falla estructural. Conversan tres estudiantes a partir de enfoques distintos del mismo problema.</p>
+            <div class="grid-3">
+                <div class="expert-card"><i class="fas fa-user-graduate" style="font-size: 2rem; color: var(--accent-deep);"></i><h3>Yuli Castillo (S)</h3><p>Presenta la lectura sociológica del problema y conecta los hallazgos con Giddens.</p></div>
+                <div class="expert-card"><i class="fas fa-chart-line" style="font-size: 2rem; color: var(--accent-deep);"></i><h3>Emperatriz Gomez (E)</h3><p>Expone los datos clave sobre informalidad, pobreza y cobertura en el mundo rural.</p></div>
+                <div class="expert-card"><i class="fas fa-gavel" style="font-size: 2rem; color: var(--accent-deep);"></i><h3>Sebastian Garzon (M)</h3><p>Analiza las implicaciones normativas y las limitaciones de la política pública.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: SEGMENTO I + II datos y gráfica avanzada -->
+    <section class="slide" id="segmentSlide2">
+        <div class="container fade-up">
+            <h2>Hechos sociales & brechas estructurales</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="dialogue-bubble"><strong>📊 Emperatriz Gomez (E):</strong> “Cobertura de salud rural llega al 98.56%, pero afiliación a riesgos laborales (ARL) en agro es inferior al 15%.”</div>
+                    <div class="dialogue-bubble"><strong>📈 Sebastian Garzon (M):</strong> “Accidentes agrícolas aumentaron +12.4% en 2018 vs años previos, evidencia de riesgos sin mitigación.”</div>
+                    <div class="data-table" style="margin-top:1rem;">
+                        <table style="width:100%">
+                            <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
+                            <tbody>
+                                <tr><td>Población rural total</td><td><strong>11.3 millones</strong></td></tr>
+                                <tr><td>Ocupados agropecuarios</td><td>~4.84 millones</td></tr>
+                                <tr><td>Pobreza extrema rural (OIT)</td><td><span class="stat-number" style="font-size:1.5rem;">88%</span></td></tr>
+                                <tr><td>Informalidad rural (2024)</td><td><strong>82.8%</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <canvas id="breachChart" width="400" height="300" style="max-height: 280px; margin-bottom: 1rem;"></canvas>
+                    <div class="expert-card"><i class="fas fa-brain"></i> <strong>Conclusión sociológica:</strong> El Estado protege al campesino como “pobre” (salud), pero lo abandona como “trabajador productivo”. Consecuencia no deseada del diseño público.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: FACTORES MULTIDIMENSIONALES + gráfica informalidad -->
+    <section class="slide" id="segmentSlide3">
+        <div class="container fade-up">
+            <h2>Factores de exclusión: económico, político, cultural</h2>
+            <div class="grid-2" style="margin-bottom: 2rem;">
+                <div>
+                    <div class="expert-card"><i class="fas fa-coins" style="color: var(--accent-deep);"></i> <h3>💰 Económico</h3><p>Ingreso Base de Cotización (IBC) mínimo legal excluye a quienes viven con ingresos por debajo del SMLV. 82.8% de informalidad rural.</p></div>
+                    <div class="expert-card"><i class="fas fa-landmark" style="color: var(--accent-deep);"></i> <h3>🏛️ Político</h3><p>Ausencia del Ministerio del Trabajo en veredas. Vigilancia casi nula. La norma se disuelve en el territorio.</p></div>
+                    <div class="expert-card"><i class="fas fa-seedling" style="color: var(--accent-deep);"></i> <h3>🌾 Sociocultural</h3><p>Naturalización del riesgo: “gajes del oficio”. 88% pobreza extrema limita la agencia y el conocimiento de derechos.</p></div>
+                </div>
+                <div>
+                    <canvas id="informalChart" width="400" height="280" style="max-height: 280px;"></canvas>
+                    <p class="text-muted" style="margin-top: 1rem;">Fuente: DANE oct-dic 2024 / rural disperso 82.8% vs nacional 55.8%</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: Interacción, estructura y vida cotidiana (concepto Giddens) -->
+    <section class="slide" id="giddensSlide">
+        <div class="container fade-up">
+            <h2>Interacción, espacio y "no-persona"</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="dialogue-bubble"><strong>🎭 Yuli Castillo (S):</strong> “Giddens: desatención cortés urbana vs desatención estatal sistemática en el campo. El accidentado rural es una no-persona para el sistema ARL.”</div>
+                    <div class="dialogue-bubble"><strong>📍 Emperatriz Gomez (E):</strong> “Regionalización: el espacio de vida y trabajo se mezclan. Las aseguradoras explotan ambigüedad para negar cobertura.”</div>
+                    <div class="dialogue-bubble"><strong>⚙️ Sebastian Garzon (M):</strong> “Consecuencias no deseadas: afiliación mensual rígida excluye jornaleros y cosecheros. Estructura diseñada para asalariado urbano.”</div>
+                </div>
+                <div class="expert-card" style="background: #fff3e6;">
+                    <i class="fas fa-hand-holding-heart" style="font-size: 2rem;"></i>
+                    <h3 style="margin-top: 0.5rem;">"Anomia rural"</h3>
+                    <p>La ausencia de normas efectivas perpetúa el ciclo de pobreza y vulnerabilidad. Se requiere enfoque diferencial territorial.</p>
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Para%C3%ADso%20Agricultor.jpg" style="width:100%; border-radius: 24px; margin-top: 1rem;" alt="Paisaje agrícola rural relacionado con el trabajo campesino" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='fallback-rural-worker.svg';">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: Síntesis hallazgos + camino a justicia social -->
+    <section class="slide" id="synthesisSlide">
+        <div class="container fade-up">
+            <h2>Síntesis & justicia social</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="stat-number" style="font-size: 1.8rem;">📉 Brecha salud vs ARL</div>
+                    <p>98.56% afiliación salud (régimen subsidiado) vs menos del 20% en riesgos laborales en el sector agropecuario. El estado asegura la supervivencia biológica pero no la protección productiva.</p>
+                    <div class="stat-number" style="font-size: 1.8rem; margin-top:1rem;">⚠️ Tasa accidentalidad +12.4%</div>
+                    <p>Incremento sostenido evidencia que el trabajo rural es cada vez más riesgoso sin medidas preventivas estructurales.</p>
+                </div>
+                <div>
+                    <div class="expert-card" style="border-top: 5px solid var(--accent-gold);">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Enfoque diferencial urgente</h3>
+                        <p>Mena Rubio propone: ARL itinerantes, educación en derechos laborales, ajuste del IBC progresivo para ingresos estacionales.</p>
+                        <p><strong>Transformación estructural:</strong> Giddens — cambiar reglas para nuevas formas de acción colectiva y protección.</p>
+                        <a style="margin-top:1rem; display:inline-block; background: var(--accent-deep); color:white; padding:0.5rem 1.2rem; border-radius: 60px; text-decoration:none;">Leer investigación completa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: Conclusiones y cierre -->
+    <section class="slide" id="conclusionSlide" style="background: #1e1b2c; color: #f5efe9;">
+        <div class="container fade-up" style="color: #f5efe9;">
+            <h2 style="color:#f5efe9;">Reflexión sociológica final</h2>
+            <div style="font-size: 1.3rem; font-weight: 300; border-left: 4px solid var(--accent-gold); padding-left: 2rem; margin: 2rem 0;">
+                “La inseguridad social del trabajador rural no es un accidente de la historia, sino un componente de una estructura que priorizó el modelo urbano-industrial. La sociología nos exige conectar lo que la sociedad hace de nosotros y lo que nosotros hacemos de nosotros mismos.”
+            </div>
+            <div class="grid-3" style="margin-top: 2rem;">
+                <div><i class="fas fa-chalkboard-user"></i> <strong>Yuli Castillo:</strong> “Cerrar la anomia rural es construir ciudadanía plena.”</div>
+                <div><i class="fas fa-chart-simple"></i> <strong>Emperatriz Gomez:</strong> “Los datos claman por universalización de la protección.”</div>
+                <div><i class="fas fa-handshake"></i> <strong>Sebastian Garzon:</strong> “Políticas con enfoque territorial y flexible.”</div>
+            </div>
+            <footer style="background: transparent; margin-top: 3rem; border-top: 1px solid #3a3645; padding-top: 2rem;">
+                <p>Referencias: Mena Rubio, S. A. (2024); Giddens, A. Cap.1; DANE (2024); Fasecolda; OIT. <br>Una producción académica para la transformación social.</p>
+            </footer>
+        </div>
+    </section>
+</div>
+
+<!-- navigation dots -->
+<div class="nav-dots" id="navDots"></div>
+
+<script>
+    // ---------- Chart.js Gráficas avanzadas ----------
+    // Gráfico de brecha salud vs ARL estimada (dato contextual)
+    const ctxBreach = document.getElementById('breachChart').getContext('2d');
+    new Chart(ctxBreach, {
+        type: 'bar',
+        data: {
+            labels: ['Cobertura Salud (Subsidiado)', 'Afiliación ARL sector agropecuario'],
+            datasets: [{
+                label: 'Porcentaje de cobertura / afiliación (%)',
+                data: [98.56, 14.2],
+                backgroundColor: ['#2a6e3b', '#c4450c'],
+                borderRadius: 12,
+                barPercentage: 0.6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'top', labels: { font: { size: 12 } } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw}%` } }
+            },
+            scales: { y: { max: 110, title: { display: true, text: 'Porcentaje (%)' } } }
+        }
+    });
+
+    // Gráfico de informalidad (barras horizontales sugerentes)
+    const ctxInf = document.getElementById('informalChart').getContext('2d');
+    new Chart(ctxInf, {
+        type: 'bar',
+        data: {
+            labels: ['Rural disperso', 'Centros poblados rural', 'Total nacional'],
+            datasets: [{
+                label: 'Informalidad laboral (%)',
+                data: [84.2, 82.8, 55.8],
+                backgroundColor: '#e6b422',
+                borderRadius: 10,
+                hoverBackgroundColor: '#c4450c'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw}% de informalidad` } }
+            }
+        }
+    });
+
+    // ------ Navegación por scroll + dots dinámicos ------
+    const slides = document.querySelectorAll('.slide');
+    const container = document.getElementById('slidesContainer');
+    const dotsContainer = document.getElementById('navDots');
+    
+    function updateDots() {
+        const scrollPos = container.scrollTop;
+        let activeIndex = 0;
+        slides.forEach((slide, idx) => {
+            const offsetTop = slide.offsetTop;
+            const height = slide.offsetHeight;
+            if (scrollPos >= offsetTop - (height * 0.3)) {
+                activeIndex = idx;
+            }
+        });
+        document.querySelectorAll('.dot').forEach((dot, i) => {
+            if (i === activeIndex) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+
+    function createDots() {
+        dotsContainer.innerHTML = '';
+        slides.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (idx === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                slides[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            dotsContainer.appendChild(dot);
+        });
+    }
+    createDots();
+    container.addEventListener('scroll', updateDots);
+    window.addEventListener('resize', updateDots);
+    updateDots();
+
+    // reveal on scroll (fade-up)
+    const fadeElements = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal');
+            }
+        });
+    }, { threshold: 0.2 });
+    fadeElements.forEach(el => observer.observe(el));
+
+    // optional: pre-cargar transición
+    setTimeout(() => {
+        window.dispatchEvent(new Event('scroll'));
+    }, 200);
+</script>
+</body>
+</html>

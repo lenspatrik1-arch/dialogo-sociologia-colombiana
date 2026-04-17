@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Imagen rural de respaldo</title>
+  <desc id="desc">Ilustración de apoyo con cultivos y herramientas de trabajo en el campo.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fde5b2"/>
+      <stop offset="100%" stop-color="#fff8eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="620" fill="url(#bg)"/>
+  <path d="M0 320 L170 250 L320 310 L520 220 L700 300 L900 240 L900 620 L0 620 Z" fill="#9b765b"/>
+  <path d="M0 390 C140 360 260 420 410 390 C560 360 710 430 900 395 L900 620 L0 620 Z" fill="#688f45"/>
+  <path d="M0 470 C150 440 270 500 430 470 C580 440 710 500 900 470 L900 620 L0 620 Z" fill="#86ac61"/>
+  <rect x="655" y="245" width="22" height="185" rx="10" fill="#5a3f30"/>
+  <path d="M610 282 C635 232 710 222 750 282 C722 310 640 318 610 282 Z" fill="#c4450c"/>
+  <rect x="270" y="360" width="160" height="18" rx="8" fill="#6a4a36"/>
+  <rect x="335" y="305" width="24" height="90" rx="10" fill="#6a4a36"/>
+  <text x="48" y="72" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#6a3a17">Imagen de apoyo del trabajo rural</text>
+  <text x="48" y="112" font-family="Arial, sans-serif" font-size="20" fill="#7a5737">Se muestra este respaldo local si la foto externa no responde.</text>
+</svg>
